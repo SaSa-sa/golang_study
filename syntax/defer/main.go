@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -26,11 +27,13 @@ func catFile(path string) (err error) {
 		}
 		// fileはCloseする必要がある。
 		// 本当はエラーハンドリングが必要(課題)
-		file.Close()
+		if closeErr := file.Close(); closeErr != nil {
+			err = closeErr
+		}
 	}()
 
 	// //エラーを明示的に返してdeferが呼ばれるか確認する。
-	// return errors.New("error")
+	return errors.New("なんやねん")
 
 	buf := make([]byte, 1024)
 	for {
