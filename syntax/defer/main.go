@@ -12,11 +12,14 @@ func main() {
 }
 
 func catFile(path string) (err error) {
-	file, err := os.Open(path)
-	if err != nil {
-		fmt.Printf("File open error: %v\n", err)
+	file, openErr := os.Open(path)
+	if openErr != nil {
+		fmt.Printf("File open error: %v\n", openErr)
+		err = openErr
 		return
 	}
+	//ここで先にクローズすると、deferの時にエラー起きる。
+	file.Close()
 
 	defer func() {
 		if err != nil {
@@ -24,17 +27,29 @@ func catFile(path string) (err error) {
 			fmt.Println("Error Handling in defer called.")
 		}
 		// fileはCloseする必要がある。
-		file.Close()
+		// 本当はエラーハンドリングが必要(課題)
+		if closeErr := file.Close(); closeErr != nil {
+			err = closeErr　// ↑のdefer更新
+		}
+		/* ここで
+		if err := file.Close(); err != nil {
+			return
+		}
+		にすると、if内のスコープ内でerrを定義しているため、catfileの戻り値にならない。
+		*/
 	}()
+
+	// return errors.New("なんやねん")
 
 	buf := make([]byte, 1024)
 	for {
-		n, err := file.Read(buf)
+		n, readErr := file.Read(buf)
 		if n == 0 {
 			break
 		}
-		if err != nil {
+		if readErr != nil {
 			fmt.Println("File read error: ", err)
+			err = readErr
 			return
 		}
 		fmt.Print(string(buf[:n]))

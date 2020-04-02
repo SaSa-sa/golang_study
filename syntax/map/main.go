@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	// mapが参照型である事の確認
@@ -15,16 +18,25 @@ func main() {
 	// ---------
 	// mapに対するfor
 	// 学籍番号と学生名のMap
-	studnetIDMap := map[int]string{
+	studentIDMap := map[int]string{
 		3: "田中",
 		1: "伊藤",
 		2: "佐藤",
 		4: "佐々木",
 	}
 
-	for k, v := range studnetIDMap {
-		// fmt.Printfでフォーマットに従った文字列を標準出力に出せる
-		fmt.Printf("Name of StudentID:%d is %s\n", k, v)
+	// mapのキーだけ取り出す
+	var keys []int
+	for k := range studentIDMap {
+		keys = append(keys, k)
+	}
+
+	//keyを昇順でソート
+	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
+	// ※sort.Ints(keys)のが早い。けど、降順にする時はsort.Slice
+
+	for _, k := range keys {
+		fmt.Printf("Name of StudentID:%d is %s\n", k, studentIDMap[k])
 	}
 }
 
