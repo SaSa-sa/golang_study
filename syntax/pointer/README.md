@@ -8,5 +8,3 @@ incrementでは値がコピーされる。
 `fmt.Println(&n)`等でアドレスが確認出来る。  
 main関数とincrementでは`n`のメモリのアドレスが異なり  
 main関数とincrementWithPointerではアドレスが同じ事を確認してください。  
-
-==>　全部違うアドレスに見える。クッソ。

@@ -1,10 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"sort"
-)
-
+import "fmt"
 
 func main() {
 	// mapが参照型である事の確認
@@ -17,25 +13,17 @@ func main() {
 	fmt.Println(m)
 
 	// ---------
-	// mapに対するfor  ==> 順序性が担保されない(入れた順に印刷されない)
+	// mapに対するfor
 	// 学籍番号と学生名のMap
-	studentIDMap := map[int]string{
+	studnetIDMap := map[int]string{
 		3: "田中",
 		1: "伊藤",
 		2: "佐藤",
 		4: "佐々木",
 	}
 
-	sum := Students{}
-	for k, v := range studentIDMap {
-		s := Student{k,v} //vにidとnameどっちも入ってる。変更必要
-		sum = append(sum,s)
-		//// fmt.Printfでフォーマットに従った文字列を標準出力に出せる
-		//fmt.Printf("Name of StudentID:%d is %s\n", k, v)
-	}
-	sort.Slice(sum,func(i,j int) bool { return sum[i].id < sum[j].id })
-	for k, v := range sum {
-		//// fmt.Printfでフォーマットに従った文字列を標準出力に出せる
+	for k, v := range studnetIDMap {
+		// fmt.Printfでフォーマットに従った文字列を標準出力に出せる
 		fmt.Printf("Name of StudentID:%d is %s\n", k, v)
 	}
 }
@@ -50,9 +38,3 @@ func addMapWithCopy(m map[string]string) {
 	}
 	copied["i"] = "い"
 }
-
-type Student struct {
-	id    int
-	name  string
-}
-type Students []Student
