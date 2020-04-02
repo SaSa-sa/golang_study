@@ -1,4 +1,4 @@
-package infrastructure
+package infrastructure // 名前定義。SQL接続の定義
 
 import (
 	"database/sql"
@@ -8,7 +8,7 @@ import (
 	// mysql driver
 	// driverを直接参照する必要はなくinit関数を呼びたいだけなので、blank importをする。
 	// https://golang.org/doc/effective_go.html#blank_import
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" //「ブランクインポート」読み込みはいるけど、直接driverのメソッド使ったりとかはないから？
 	"github.com/joho/godotenv"
 )
 

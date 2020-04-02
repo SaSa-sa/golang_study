@@ -1,4 +1,4 @@
-package database
+package database //SQL系の定義
 
 import (
 	"database/sql"
@@ -20,16 +20,16 @@ func Store(db *sql.DB, u domain.User) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return int(id64), nil
+	return int(id64), nil //id,エラーを返す
 }
 
 // FindByID is a function for getting a user.
 func FindByID(db *sql.DB, identifier int) (*domain.User, error) {
-	row, err := db.Query("SELECT id, first_name, last_name FROM users WHERE id = ?", identifier)
+	row, err := db.Query("SELECT id, first_name, last_name FROM users WHERE id = ?", identifier)　//id指定。クエリ実行
 	if err != nil {
 		return nil, err
 	}
-	defer row.Close()
+	defer row.Close() //ここまでお作法
 
 	var id int
 	var firstName string
@@ -43,7 +43,7 @@ func FindByID(db *sql.DB, identifier int) (*domain.User, error) {
 	if err = row.Scan(&id, &firstName, &lastName); err != nil {
 		return nil, err
 	}
-	user := &domain.User{
+	user := &domain.User{ //ストラクトに詰め込む
 		ID:        id,
 		FirstName: firstName,
 		LastName:  lastName,
@@ -65,15 +65,15 @@ func FindAll(db *sql.DB) (domain.Users, error) {
 		var id int
 		var firstName string
 		var lastName string
-		if err := rows.Scan(&id, &firstName, &lastName); err != nil {
+		if err := rows.Scan(&id, &firstName, &lastName); err != nil { //特定のカラムを読み出し
 			return nil, err
 		}
-		user := domain.User{
+		user := domain.User{ //レコードからインスタンス作成
 			ID:        id,
 			FirstName: firstName,
 			LastName:  lastName,
 		}
-		users = append(users, user)
+		users = append(users, user) //複数インスタンス作成
 	}
 	return users, nil
 }
