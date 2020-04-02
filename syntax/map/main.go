@@ -25,12 +25,15 @@ func main() {
 		4: "佐々木",
 	}
 
-	// キーを並び替え
+	// mapのキーだけ取り出す
 	var keys []int
 	for k := range studentIDMap {
 		keys = append(keys, k)
 	}
-	sort.Ints(keys)
+
+	//keyを昇順でソート
+	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
+	// ※sort.Ints(keys)のが早い。けど、降順にする時はsort.Slice
 
 	for _, k := range keys {
 		fmt.Printf("Name of StudentID:%d is %s\n", k, studentIDMap[k])
