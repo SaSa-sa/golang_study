@@ -2,6 +2,8 @@
 
 forで定義した変数は初回のみしかAllocateされません。  
 なので、forで定義した変数のポインタを使うと想定していない副作用が発生します。  
+==> forの中の処理にポインタを指定しない！
+
 Let's Encryptのブログに同じ問題でハマった事が書かれています。  
 https://jovi0608.hatenablog.com/entry/2020/03/09/094737  
 
@@ -12,7 +14,7 @@ linterを変えれば、検知してくれる。
 検証  
 ```
 $ make install-lint
-$ make lint
+$ make golint
 # Errorにならない
 $ make scopelint
 # Errorになる

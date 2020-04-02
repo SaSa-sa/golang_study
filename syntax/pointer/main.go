@@ -15,11 +15,13 @@ func main() {
 	// 戻り値を受け取らなくても渡した変数が書き換わる
 	incrementWithPointer(&n)
 	fmt.Printf("Value of n is %d\n", n)
+	fmt.Println(&n)
 }
 
 func increment(n int) int {
 	return n + 1
 }
 func incrementWithPointer(n *int) {
+	fmt.Println(&n)
 	*n++
 }

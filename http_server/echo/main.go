@@ -25,6 +25,8 @@ func main() {
 	// POST Bodyの読み込み
 	e.POST("/incr", incrementHandler)
 
+	e.GET("greet", GreetHandler)
+
 	// 8080ポートで起動
 	e.Logger.Fatal(e.Start(":8080"))
 }
@@ -50,6 +52,9 @@ func squareHandler(c echo.Context) error {
 		// 他のエラーの可能性もあるがサンプルとして纏める
 		return echo.NewHTTPError(http.StatusBadRequest, "num is not integer")
 	}
+	if num >= 100 {
+		return echo.NewHTTPError(http.StatusBadRequest  , "more than 100 is not allowed")
+	}
 	// fmt.Sprintfでフォーマットに沿った文字列を生成できる。
 	return c.String(http.StatusOK, fmt.Sprintf("Square of %d is equal to %d", num, num*num))
 }
@@ -57,6 +62,9 @@ func squareHandler(c echo.Context) error {
 // Bodyから数字を取得してその数字だけCounterをIncrementするハンドラー
 // DBがまだないので簡易的なもの
 func incrementHandler(c echo.Context) error {
+	if c.Request().Method != "POST"{
+		return echo.NewHTTPError(http.StatusMethodNotAllowed, "only accepted by POST")
+	}
 	incrRequest := incrRequest{}
 	if err := c.Bind(&incrRequest); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Internal Server Error")
@@ -69,4 +77,9 @@ type incrRequest struct {
 	// jsonタグをつける事でjsonのunmarshalが出来る
 	// jsonパッケージに渡すので、Publicである必要がある
 	Num int `json:"num"`
+}
+
+func GreetHandler(c echo.Context) error {
+	name := c.Request().Header.Get("name")
+	return c.String(http.StatusOK, name)
 }

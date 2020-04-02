@@ -40,7 +40,7 @@ func catFile(path string) (err error) {
 		fmt.Print(string(buf[:n]))
 	}
 
-	// これだとエラー時にfileが開きっぱなしになる。
+	// これだとエラー時にfileが開きっぱなしになる。(ここに来る前に処理止まっちゃう)
 	// file.Close()
 
 	return nil
