@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 )
@@ -19,6 +18,8 @@ func catFile(path string) (err error) {
 		err = openErr
 		return
 	}
+	//ここで先にクローズすると、deferの時にエラー起きる。
+	file.Close()
 
 	defer func() {
 		if err != nil {
@@ -28,12 +29,17 @@ func catFile(path string) (err error) {
 		// fileはCloseする必要がある。
 		// 本当はエラーハンドリングが必要(課題)
 		if closeErr := file.Close(); closeErr != nil {
-			err = closeErr
+			err = closeErr　// ↑のdefer更新
 		}
+		/* ここで
+		if err := file.Close(); err != nil {
+			return
+		}
+		にすると、if内のスコープ内でerrを定義しているため、catfileの戻り値にならない。
+		*/
 	}()
 
-	// //エラーを明示的に返してdeferが呼ばれるか確認する。
-	return errors.New("なんやねん")
+	// return errors.New("なんやねん")
 
 	buf := make([]byte, 1024)
 	for {
