@@ -1,4 +1,4 @@
-package controllers
+package controllers //アクション指定
 
 import (
 	"database/sql"

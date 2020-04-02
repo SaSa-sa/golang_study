@@ -16,7 +16,7 @@ func main() {
 	// flagでコマンドライン引数を読み取る
 	// 例) `-a index`　でoptionにindexが代入される
 	option := flag.String("a", "", "action")
-	id := flag.String("i", "", "user id")
+	id := flag.String("i", "", "user id") // (フラグ名、デフォルト値、ヘルプメッセージ)https://qiita.com/Yaruki00/items/7edc04720a24e71abfa2
 	firstName := flag.String("f", "Alan", "first name")
 	lastName := flag.String("l", "Turing", "last name")
 	flag.Parse()
