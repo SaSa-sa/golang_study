@@ -25,12 +25,12 @@ func main() {
 		fmt.Printf("j is %d\n", j)
 	}
 
-	// Goの標準パッケージ
+	// Goの標準パッケージ。↑のerrを変えたい時
 	err := errors.New("error occurred")
 	fmt.Printf("%+v\n\n", err)
 
 	// github.com/pkg/errors
-	// 以下の様なスタックトレースが出せるので、こちらをよく使う。
+	// 以下の様なスタックトレースが出せる(どこでエラーが起きたか分かる)ので、こちらをよく使う。
 	// main.main
 	// 	/Users/sakura.yuto/go/src/github.com/mf-sakura/golang_study/exception/error/main.go:15
 	// runtime.main
@@ -39,7 +39,7 @@ func main() {
 	// 	/Users/sakura.yuto/.goenv/versions/1.14.0/src/runtime/asm_amd64.s:1373
 	gErr := gerrors.New("error occurred")
 	// スタックトレースを出すには、`%+v`を使う
-	fmt.Printf("%+v\n\n", gErr)
+	fmt.Printf("%+v\n\n", gErr) //-> 'error occurred"'
 	// WithStackでStackを追加出来る
 	stackErr := gerrors.WithStack(gErr)
 	fmt.Printf("%+v\n\n", stackErr)
