@@ -24,6 +24,8 @@ func main() {
 	e.GET("/square", squareHandler)
 	// POST Bodyの読み込み
 	e.POST("/incr", incrementHandler)
+	// 自作api
+	e.POST("/exchange", exchangeHandler)
 
 	// 8080ポートで起動
 	e.Logger.Fatal(e.Start(":8080"))
@@ -50,6 +52,9 @@ func squareHandler(c echo.Context) error {
 		// 他のエラーの可能性もあるがサンプルとして纏める
 		return echo.NewHTTPError(http.StatusBadRequest, "num is not integer")
 	}
+	if num >= 100 {
+		return echo.NewHTTPError(http.StatusBadRequest, "num must be under 100")
+	}
 	// fmt.Sprintfでフォーマットに沿った文字列を生成できる。
 	return c.String(http.StatusOK, fmt.Sprintf("Square of %d is equal to %d", num, num*num))
 }
@@ -62,11 +67,34 @@ func incrementHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Internal Server Error")
 	}
 	counter += incrRequest.Num
-	return c.String(http.StatusOK, fmt.Sprintf("Value of Counter is %d \n", counter))
+	result := Result{Counter: counter}
+	return c.JSON(http.StatusOK, result) //c.Stringだとステータスと文字列、c.JSONだと変数をjsonの型で返してくれる(echoの仕様)
 }
 
 type incrRequest struct {
 	// jsonタグをつける事でjsonのunmarshalが出来る
 	// jsonパッケージに渡すので、Publicである必要がある
-	Num int `json:"num"`
+	Num int `json:"num"` //「jsonの{"num":}の値を入れるよ。」
+}
+
+type Result struct {
+	Counter int `json: "counter"`
+}
+
+func exchangeHandler(c echo.Context) error {
+	yen := Yen{}
+	if err := c.Bind(&yen); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "can't exchange")
+	}
+	dol := Dol{Amount: (yen.Amount / yen.Rate)}
+	return c.JSON(http.StatusOK, dol)
+}
+
+type Yen struct {
+	Amount int `json:"amount"`
+	Rate   int `json:"rate"`
+}
+
+type Dol struct {
+	Amount int `json:"dol_amount" xml:"dol"`
 }
