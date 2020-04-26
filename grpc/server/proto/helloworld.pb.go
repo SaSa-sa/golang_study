@@ -177,7 +177,7 @@ func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...
 }
 
 // GreeterServer is the server API for Greeter service.
-type GreeterServer interface {
+type GreeterServer interface { //protoレポジトリで作成されたものが自動生成されている。この記述を元にseviceレポジトリ以下を定義
 	// Sends a greeting
 	// 実装されるRPC
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
