@@ -41,25 +41,25 @@ func main() {
 	// スタックトレースを出すには、`%+v`を使う
 	fmt.Printf("%+v\n\n", gErr) //-> 'error occurred"'
 	// WithStackでStackを追加出来る
-	stackErr := gerrors.WithStack(gErr)
+	stackErr := gerrors.WithStack(gErr) // .Withstach => ファイル元情報追加
 	fmt.Printf("%+v\n\n", stackErr)
 	// Wrap, WrapfでStackを追加しながら、エラーメッセージの追加が出来る
-	wrappedErr := gerrors.Wrap(stackErr, "wrap")
-	fmt.Printf("%+v\n\n", wrappedErr)
-	fmt.Println(wrappedErr)
+	wrappedErr := gerrors.Wrap(stackErr, "wrap") // .Wrap => 任意のエラー文を追加
+	fmt.Printf("%+v\n\n", wrappedErr)            // => %+vを指定するとファイル場所ができる
+	fmt.Println(wrappedErr)                      // => これだとエラー文だけ
 
 	// 自分で定義したエラー
 	// 特定の条件で使うエラーを定義しておき、そのエラーの場合にのみ処理する事が可能になる。
 
 	var myErr error
-	myErr = MyError{}
-	if _, ok := myErr.(MyError); ok {
-		fmt.Println("Type of myError is MyError")
+	myErr = MyError{}                 // => 構造体を代入(MyError{}がerror型として正しくないとここでエラー)
+	if _, ok := myErr.(MyError); ok { //キャストしている(myErrが、MyError型として正しいか判定)
+		fmt.Println("Variable is MyError")
 	} else {
-		fmt.Println("Type of myError isn't MyError")
+		fmt.Println("Variable isn't MyError")
 	}
 
-	if _, ok := gErr.(MyError); ok {
+	if _, ok := gErr.(MyError); ok { // => これはfalseになる
 		fmt.Println("Type of gErr is MyError")
 	} else {
 		fmt.Println("Type of gErr isn't MyError")
